@@ -28,7 +28,7 @@ def PDF_to_Text(pdf_path):
     return "\n".join(pages)
    
 # ------------------------------------------------------------------------------------------------------------------   
-def LLM_CleanPDF(client,Role, rawText, sourceName, _model):
+def LLM_CleanPDF(client,Role, rawText, sourceName, model, provider):
 
     Input=f"""
     SOURCE DOCUMENT: {sourceName}
@@ -41,8 +41,8 @@ def LLM_CleanPDF(client,Role, rawText, sourceName, _model):
     client,
     Role,
     Input,
-    model=_model,
-    provider="openai",
+    model= model,
+    provider= provider,
     effort="medium"
 )
     
@@ -70,7 +70,7 @@ def makeMDName(pdf_file, md_dir, length=20):
 # ------------------------------------------------------------------------------------------------------------------    
 from pathlib import Path
 
-def GetWorldFile(client, Role, pdf_file, md_dir, _model="gpt-5-mini"):
+def GetWorldFile(client, Role, pdf_file, md_dir, model, provider):
 
     pdf_file = Path(pdf_file)
     #md_path  = Path(md_path)
@@ -84,7 +84,7 @@ def GetWorldFile(client, Role, pdf_file, md_dir, _model="gpt-5-mini"):
     print(f"Extracted: {len(rawText):,} characters")
 
     # Step 2: raw text → clean Markdown
-    cleanMD = LLM_CleanPDF(client, Role,rawText,pdf_file.name,_model)
+    cleanMD = LLM_CleanPDF(client, Role,rawText,pdf_file.name, model, provider)
 
     # Add provenance header
     header = f"""# SOURCE: {pdf_file.stem}
