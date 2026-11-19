@@ -6,7 +6,7 @@
 
 import json
 from pathlib import Path
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from copy import deepcopy
 
 
@@ -14,18 +14,17 @@ from copy import deepcopy
 # WorldVariable
 # ------------------------------------------------------------
 
+#from dataclasses import dataclass, field
+
 @dataclass
 class WorldVariable:
-    """
-    Definition of a geopolitical state variable.
-
-    Values are numerical indices, normally initialised at 100.
-    """
-
     name: str
     description: str
     direction: str
-    initial_value: float = 100.0
+    index: float = 100.0
+    status: str = ""
+    rationale: str = ""
+    conditions: list[str] = field(default_factory=list)
 
 
 # ------------------------------------------------------------
@@ -74,7 +73,7 @@ class WorldState:
 
         if values is None:
             self.values = {
-                v.name: v.initial_value
+                v.name: v.index
                 for v in self.variables
             }
         else:

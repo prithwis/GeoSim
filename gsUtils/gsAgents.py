@@ -64,14 +64,89 @@ class ZeitWorld(Agent):
         2. Generate W[t+1] from W[t] and a selected event.
     """
 
-    def initialise(self, variables, world_facts):
-        """
-        Construct the initial WorldState.
+    def initialise(self, variables, world_facts, init_prompt):
+        import json
+        from dataclasses import asdict
+        from gsWorld import WorldState
 
-        Implementation will use the WorldState class
-        defined in gsWorld.py.
-        """
-        raise NotImplementedError
+        self.initialised = False
+
+        # Construct the WorldState template
+        template = {
+            "variables": [asdict(v) for v in variables]
+        }
+
+        query = (
+            f"{init_prompt}\n\n"
+            "WORLDSTATE TEMPLATE\n"
+            f"{json.dumps(template, indent=2, ensure_ascii=False)}\n\n"
+            "WORLD FACTS\n"
+            f"{world_facts}"
+        )
+
+        # Actual LLM call
+        response = self.ask(query)
+
+        # Accept JSON returned inside a Markdown code fence
+        response = response.strip()
+        if response.startswith("```"):
+            response = response.split("\n", 1)[1]
+            response = response.rsplit("```", 1)[0].strip()
+
+        result = json.loads(response)
+
+        # Validate the returned WorldState
+        returned = result["variables"]
+
+        if len(returned) != len(variables):
+            raise ValueError("ZeitWorld returned incorrect variable count")
+
+        required = {
+            "name", "description", "direction", "index",
+            "status", "rationale", "conditions"
+        }
+
+        for original, completed in zip(variables, returned):
+
+            if set(completed) != required:
+                raise ValueError(
+                    f"Incorrect fields for {original.name}"
+                )
+
+            for key in ("name", "description", "direction"):
+                if completed[key] != getattr(original, key):
+                    raise ValueError(
+                        f"{original.name}: {key} was modified"
+                    )
+
+            if type(completed["index"]) not in (int, float) or completed["index"] != 100:
+                raise ValueError(
+                    f"{original.name}: initial index must be 100"
+                )
+
+            if not isinstance(completed["status"], str):
+                raise ValueError("Invalid status")
+
+            if not isinstance(completed["rationale"], str):
+                raise ValueError("Invalid rationale")
+
+            if not isinstance(completed["conditions"], list) or not all(
+                isinstance(c, str) for c in completed["conditions"]
+            ):
+                raise ValueError("Invalid conditions")
+
+        # Convert completed dictionaries to WorldVariable objects
+        from gsWorld import WorldVariable
+
+        completed_variables = [
+            WorldVariable(**item) for item in returned
+        ]
+
+        # WorldState must retain these completed variables
+        W0 = WorldState(completed_variables)
+
+        self.initialised = True
+        return W0
 
     def evolve(self, current_state, event):
         """
