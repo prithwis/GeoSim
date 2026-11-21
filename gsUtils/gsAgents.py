@@ -143,7 +143,8 @@ class ZeitWorld(Agent):
         ]
 
         # WorldState must retain these completed variables
-        W0 = WorldState(completed_variables)
+        #W0 = WorldState(completed_variables)
+        W0 = WorldState("W0", completed_variables)
 
         self.initialised = True
         return W0
