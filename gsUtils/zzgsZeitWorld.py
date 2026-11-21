@@ -295,7 +295,7 @@ class zzZeitWorld_Agent:
 # =============================================================================
 
 @dataclass
-class Event:
+class zzEvent:
     actor: str
     action: str
     rationale: str = ""

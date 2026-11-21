@@ -174,3 +174,19 @@ class WorldState:
         print(f"Invalid show parameter: {n}")
 
 # =============================================================================     
+
+@dataclass
+class Event:
+    actor: str
+    action: str
+    rationale: str = ""
+    event_id: str = ""
+    selection_weight: float | None = None
+
+    def show(self):
+        print(f"Event     : {self.event_id}")
+        print(f"Actor     : {self.actor}")
+        print(f"Action    : {self.action}")
+        print(f"Rationale : {self.rationale}")
+        print(f"selection_weight : {self.selection_weight}")
+        
