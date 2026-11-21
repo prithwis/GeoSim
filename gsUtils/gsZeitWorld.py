@@ -12,7 +12,7 @@ from mos import *
 
 # =============================================================================
 @dataclass
-class WorldVariable:
+class zzWorldVariable:
     name: str
     description: str
     direction: str
@@ -25,7 +25,7 @@ class WorldVariable:
 # =============================================================================
 
 @dataclass
-class WorldState:
+class zzWorldState:
     state_id: str
     variables: list[WorldVariable] = field(default_factory=list)
 
