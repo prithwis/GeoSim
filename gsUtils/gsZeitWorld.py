@@ -180,7 +180,7 @@ def getPrompt(filename):
         
 # =============================================================================     
 
-class ZeitWorld_Agent:
+class zzZeitWorld_Agent:
 
     def __init__(self, client, model, role):
         self.client = client

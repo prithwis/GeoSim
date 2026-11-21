@@ -147,14 +147,63 @@ class ZeitWorld(Agent):
 
         self.initialised = True
         return W0
+# -------------            
 
-    def evolve(self, current_state, event):
+    def update(self, world_list, event, update_prompt):
         """
-        Generate the next WorldState after an event.
+        Apply an executed Event to the current WorldState,
+        create W[t+1], append it to world_list,
+        and return the new WorldState.
         """
-        raise NotImplementedError
+
+        if not self.initialised:
+            raise RuntimeError(
+                "ZeitWorld must be initialised before update."
+            )
+
+        current_state = world_list[-1]
+        print("ZeitWorld Updating WorldState ----------", current_state.state_id)
+        
+        current_number = int(current_state.state_id[1:])
+        next_state_id = f"W{current_number + 1}"
+
+        # Build complete runtime input
+        full_input = f"""
+        {update_prompt}
+
+        CURRENT WORLDSTATE
+        ==================
+        {current_state.to_json()}
 
 
+        EXECUTED EVENT
+        ==============
+        Event ID : {event.event_id}
+        Actor    : {event.actor}
+        Action   : {event.action}
+        """
+
+        # Ask ZeitWorld to calculate the new state
+        response = callLLM(
+            self.client,
+            self.role,
+            full_input,
+            self.model,
+            _effort="medium"
+        )
+
+        data = json.loads(response)
+
+        new_state = WorldState.from_dict(data)
+
+        # Python controls state identity
+        new_state.state_id = next_state_id
+
+        # A successfully generated state immediately becomes history
+        world_list.append(new_state)
+        print("Appended  WorldState ----------", new_state.state_id)
+        return new_state
+# =============================================================================
 # ------------------------------------------------------------
 # Chanakya
 # ------------------------------------------------------------
