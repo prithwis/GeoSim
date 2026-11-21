@@ -27,6 +27,39 @@ def PDF_to_Text(pdf_path):
 
     return "\n".join(pages)
    
+
+def PDF_to_Text_Batches(pdf_path, max_chars=150000):
+
+    batches = []
+    current = []
+    current_size = 0
+
+    with pymupdf.open(pdf_path) as doc:
+        total_pages = len(doc)
+
+        for page_no, page in enumerate(doc, start=1):
+
+            text = (
+                f"\n\n===== PAGE {page_no} =====\n\n"
+                + page.get_text("text")
+            )
+
+            if current and current_size + len(text) > max_chars:
+                batches.append("".join(current))
+                current = []
+                current_size = 0
+
+            current.append(text)
+            current_size += len(text)
+
+    if current:
+        batches.append("".join(current))
+
+    print(f"Pages   : {total_pages}")
+    print(f"Batches : {len(batches)}")
+
+    return batches
+
 # ------------------------------------------------------------------------------------------------------------------   
 def LLM_CleanPDF(client,Role, rawText, sourceName, model, provider):
 
@@ -70,7 +103,7 @@ def makeMDName(pdf_file, md_dir, length=20):
 # ------------------------------------------------------------------------------------------------------------------    
 from pathlib import Path
 
-def GetWorldFile(client, Role, pdf_file, md_dir, model, provider):
+def zGetWorldFile(client, Role, pdf_file, md_dir, model, provider):
 
     pdf_file = Path(pdf_file)
     #md_path  = Path(md_path)
@@ -105,6 +138,69 @@ def GetWorldFile(client, Role, pdf_file, md_dir, model, provider):
 
     return md_path
     
+
+def GetWorldFile(client, Role, pdf_file, md_dir, model, provider):
+
+    pdf_file = Path(pdf_file)
+    md_path = makeMDName(pdf_file, md_dir, length=20)
+
+    print(f"Reading: {pdf_file.name}")
+
+    # Step 1: Extract complete PDF in page-aware batches
+    batches = PDF_to_Text_Batches(
+        pdf_file,
+        max_chars=150000
+    )
+
+    if not batches:
+        raise ValueError("No PDF pages extracted")
+
+    # Step 2: Clean every batch using Luna
+    cleaned = []
+
+    for i, batch in enumerate(batches, 1):
+
+        print(
+            f"Cleaning {i}/{len(batches)} "
+            f"({len(batch):,} characters)"
+        )
+
+        result = LLM_CleanPDF(
+            client,
+            Role,
+            batch,
+            f"{pdf_file.name} - Part {i}/{len(batches)}",
+            model,
+            provider
+        )
+
+        if not isinstance(result, str) or not result.strip():
+            raise ValueError(f"Empty output from batch {i}")
+
+        cleaned.append(result.strip())
+
+        print(f"Output: {len(result):,} characters")
+
+    # Step 3: Assemble Markdown in original order
+    header = f"""# SOURCE: {pdf_file.stem}
+
+**Source PDF:** `{pdf_file.name}`
+
+---
+
+"""
+
+    cleanMD = header + "\n\n".join(cleaned)
+
+    # Step 4: Save only after all batches succeed
+    md_path.parent.mkdir(parents=True, exist_ok=True)
+    md_path.write_text(cleanMD, encoding="utf-8")
+
+    print(f"Created  : {md_path.name}")
+    print(f"Markdown : {len(cleanMD):,} characters")
+
+    return md_path
+
 # ------------------------------------------------------------------------------------------------------------------
 from IPython.display import display, Markdown
 
