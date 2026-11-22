@@ -209,7 +209,6 @@ class ZeitWorld(Agent):
         #world_list.append(new_state)
         print("Generated WorldState ----------", new_state.state_id)
 
-        print("Appended WorldState ----------", new_state.state_id)
         return new_state
 
 # =============================================================================
