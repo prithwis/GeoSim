@@ -175,6 +175,15 @@ class WorldState:
 
 # =============================================================================     
 
+
+@dataclass
+class Actor:
+    actor_id: str
+    name: str
+    description: str
+    objectives: str
+
+
 @dataclass
 class Event:
     actor: str
