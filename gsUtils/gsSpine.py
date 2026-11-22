@@ -1,3 +1,5 @@
+import json
+
 def getWorldFacts(MD_DIR):
     md_files = sorted(MD_DIR.glob("*.md"))
 
