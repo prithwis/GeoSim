@@ -63,13 +63,16 @@ class ZeitWorld(Agent):
         1. Initialise W[0].
         2. Generate W[t+1] from W[t] and a selected event.
     """
+    def __init__(self, client, role, model, provider, effort="medium"):
+            super().__init__(client, role, model, provider, effort)
+            self.initialised = False
 
     def initialise(self, variables, world_facts, init_prompt):
         import json
         from dataclasses import asdict
         from gsWorld import WorldState
 
-        self.initialised = False
+        #self.initialised = False
 
         # Construct the WorldState template
         template = {
