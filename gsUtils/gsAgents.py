@@ -150,12 +150,16 @@ class ZeitWorld(Agent):
         return W0
 # -------------            
 
+   
     def update(self, world_list, event, update_prompt):
         """
         Apply an executed Event to the current WorldState,
         create W[t+1], append it to world_list,
         and return the new WorldState.
         """
+
+        import json
+        from gsWorld import WorldState
 
         if not self.initialised:
             raise RuntimeError(
@@ -164,7 +168,7 @@ class ZeitWorld(Agent):
 
         current_state = world_list[-1]
         print("ZeitWorld Updating WorldState ----------", current_state.state_id)
-        
+
         current_number = int(current_state.state_id[1:])
         next_state_id = f"W{current_number + 1}"
 
@@ -176,34 +180,35 @@ class ZeitWorld(Agent):
         ==================
         {current_state.to_json()}
 
-
         EXECUTED EVENT
         ==============
-        Event ID : {event.event_id}
-        Actor    : {event.actor}
-        Action   : {event.action}
+        Actor     : {event.actor}
+        Action    : {event.action}
+        Rationale : {event.rationale}
         """
 
         # Ask ZeitWorld to calculate the new state
-        response = callLLM(
-            self.client,
-            self.role,
-            full_input,
-            self.model,
-            _effort="medium"
-        )
+        response = self.ask(full_input)
+
+        # Accept JSON inside Markdown code fences
+        response = response.strip()
+        if response.startswith("```"):
+            response = response.split("\n", 1)[1]
+            response = response.rsplit("```", 1)[0].strip()
 
         data = json.loads(response)
-
         new_state = WorldState.from_dict(data)
 
         # Python controls state identity
         new_state.state_id = next_state_id
 
-        # A successfully generated state immediately becomes history
-        world_list.append(new_state)
-        print("Appended  WorldState ----------", new_state.state_id)
+        # Successfully generated state becomes history
+        #world_list.append(new_state)
+        print("Generated WorldState ----------", new_state.state_id)
+
+        print("Appended WorldState ----------", new_state.state_id)
         return new_state
+
 # =============================================================================
 # ------------------------------------------------------------
 # Chanakya
