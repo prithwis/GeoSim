@@ -1,13 +1,10 @@
 
 # ============================================================
-# gsAgents.py
+# gsActors.py
 # GeoSim - LLM Agent Classes
 # ============================================================
 
 from gsLLM import callLLM
-
-
-
 
 class Actor:
     def __init__(self, client, model, provider,

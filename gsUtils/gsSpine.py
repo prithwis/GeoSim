@@ -31,8 +31,8 @@ def getTriggerEvent(eventFile, n):
     TriggerEvents = [Event(**e) for e in data["events"]]
 
     # Choose either event
-    #TriggerEvent = TriggerEvents[0]   # US export restrictions
-    #TriggerEvent = TriggerEvents[1] # Chinese lithography breakthrough
+    #TriggerEvent = TriggerEvents[0]    # US export restrictions
+    #TriggerEvent = TriggerEvents[1]    # Chinese lithography breakthrough
     return TriggerEvents[n]
 
     #TriggerEvent.show()

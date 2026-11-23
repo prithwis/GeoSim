@@ -1,6 +1,6 @@
 
 # ============================================================
-# gsAgents.py
+# gsZeitWorld.py
 # GeoSim - LLM Agent Classes
 # ============================================================
 
@@ -32,18 +32,6 @@ class ZeitWorld:
 
         self.initialised = False
 
-    def ask(self, query):
-        """
-        Send a query to the configured LLM.
-        """
-        return callLLM(
-            self.client,
-            self.role,
-            query,
-            model=self.model,
-            provider=self.provider,
-            effort=self.effort
-        )
 
     def initialise(self, variables, world_facts, init_prompt):
         import json
@@ -66,7 +54,14 @@ class ZeitWorld:
         )
 
         # Actual LLM call
-        response = self.ask(query)
+        response = callLLM(
+            self.client,
+            self.role,
+            query,
+            model=self.model,
+            provider=self.provider,
+            effort=self.effort
+        )
 
         # Accept JSON returned inside a Markdown code fence
         response = response.strip()
@@ -170,7 +165,14 @@ class ZeitWorld:
         """
 
         # Ask ZeitWorld to calculate the new state
-        response = self.ask(full_input)
+        response = callLLM(
+            self.client,
+            self.role,
+            full_input,
+            model=self.model,
+            provider=self.provider,
+            effort=self.effort
+        )
 
         # Accept JSON inside Markdown code fences
         response = response.strip()
