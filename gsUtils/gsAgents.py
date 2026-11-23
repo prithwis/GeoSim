@@ -11,7 +11,7 @@ from gsLLM import callLLM
 # Base Agent
 # ------------------------------------------------------------
 
-class Agent:
+class zAgent:
     """
     Base class for all LLM-driven GeoSim agents.
 
@@ -49,6 +49,89 @@ class Agent:
             provider=self.provider,
             effort=self.effort
         )
+
+
+class Actor(Agent):
+    def __init__(self, client, model, provider,
+                 actor_id, name, description, role,
+                 actor_type="LLM", email=None,
+                 effort="medium"):
+
+        super().__init__(client, role, model, provider, effort)
+
+        self.actor_id = actor_id
+        self.name = name
+        self.description = description
+        self.role = role
+        self.actor_type = actor_type
+        self.email = email
+
+    def show(self):
+
+        print(f"Actor ID    : {self.actor_id}")
+        print(f"Name        : {self.name}")
+        print(f"Description : {self.description}")
+        print(f"Type        : {self.actor_type}")
+
+
+    # --------------------------------------------------------
+    # Convert Trigger Event to text
+    # --------------------------------------------------------
+
+    def _event_to_text(self, event):
+
+        return f"""
+        Event ID  : {event.event_id}
+        Actor     : {event.actor}
+        Action    : {event.action}
+        Rationale : {event.rationale}
+        """.strip()
+
+
+    # --------------------------------------------------------
+    # Convert WorldState to text
+    # --------------------------------------------------------
+
+    def _world_to_text(self, world):
+        """
+        Convert the current WorldState into compact text
+        suitable for strategic reasoning.
+
+        Chanakya receives:
+            - variable name
+            - index
+            - status
+            - surviving conditions
+
+        ZeitWorld's transition rationale is deliberately
+        excluded.
+        """
+
+        lines = [
+            f"WorldState: {world.state_id}",
+            ""
+        ]
+
+        for v in world.variables:
+
+            lines.append(f"VARIABLE: {v.name}")
+            lines.append(f"Index: {v.index}")
+            lines.append(f"Status: {v.status}")
+
+            if v.conditions:
+
+                lines.append("Conditions:")
+
+                for condition in v.conditions:
+                    lines.append(f"- {condition}")
+
+            lines.append("")
+
+        return "\n".join(lines)
+    
+    
+    def propose(self, W, E, propose_prompt):
+        raise NotImplementedError
 
 
 # ------------------------------------------------------------
