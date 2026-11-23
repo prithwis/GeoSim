@@ -180,6 +180,7 @@ class ZeitWorld(Agent):
             response = response.rsplit("```", 1)[0].strip()
 
         result = json.loads(response)
+        print(json.dumps(result["variables"][2], indent=2))
 
         # Validate the returned WorldState
         returned = result["variables"]
