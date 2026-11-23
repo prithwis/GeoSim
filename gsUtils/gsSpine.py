@@ -1,6 +1,6 @@
 import json
 from gsWorld import Event, WorldVariable, WorldState
-#from gsAgents import Actor
+from gsActors import Actor
 
 # ====================================================================================
 
@@ -42,7 +42,7 @@ def getTriggerEvent(eventFile, n):
     
 def initialiseActors(actorFile, client, model, provider, effort="medium"):
     import json
-    from gsAgents import Actor
+    #from gsAgents import Actor
 
     with open(actorFile, "r", encoding="utf-8") as f:
         data = json.load(f)
