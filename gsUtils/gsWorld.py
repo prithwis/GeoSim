@@ -188,6 +188,8 @@ class Event:
 
     def show(self):
         #print(f"Event     : {self.event_id}")
+         print(f"\nEvent : {self.event_id}")
+         print("-" * 55)
         print(f"Actor     : {self.actor}")
         print(f"Action    : {self.action}")
         print(f"Rationale : {self.rationale}")
