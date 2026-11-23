@@ -1,6 +1,6 @@
 import json
 from gsWorld import Event, WorldVariable, WorldState
-from gsAgents import Actor
+#from gsAgents import Actor
 
 # ====================================================================================
 
