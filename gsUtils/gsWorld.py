@@ -192,11 +192,11 @@ class Event:
         print(f"Action    : {self.action}")
         print(f"Rationale : {self.rationale}")
         print(f"selection_weight : {self.selection_weight}")
-        
+      '''  
     def to_json(self):
         return json.dumps(
             self,
             default=lambda o: o.__dict__,
             indent=2
         )
-        
+        '''
