@@ -216,18 +216,19 @@ class ZeitWorld(Agent):
 # Chanakya
 # ------------------------------------------------------------
 
-class Chanakya(Agent):
-    """
-    Proposes candidate geopolitical events.
+class Actor(Agent):
 
-    Different Chanakya instances may represent different
-    countries, strategic perspectives or LLM providers.
-    """
+    def __init__(self, client, model, provider,
+                 actor_id, name, description, role,
+                 effort="medium"):
 
-    def propose(self, world_state):
-        """
-        Generate candidate events from the current WorldState.
-        """
+        super().__init__(client, role, model, provider, effort)
+
+        self.actor_id = actor_id
+        self.name = name
+        self.description = description
+
+    def propose(self, W, E, propose_prompt):
         raise NotImplementedError
 
 

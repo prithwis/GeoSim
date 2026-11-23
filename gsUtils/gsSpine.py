@@ -32,7 +32,7 @@ def getTriggerEvent(eventFile, n):
 
     #TriggerEvent.show()
     
-def loadActors(actorFile):
+def zzzzloadActors(actorFile):
     import json
     from gsWorld import Actor
 
@@ -41,5 +41,31 @@ def loadActors(actorFile):
 
     Actors = [Actor(**a) for a in data["actors"]]
     actor_map = {a.actor_id: a for a in Actors}
+
+    return Actors, actor_map
+    
+def initialiseActors(actorFile, client, model, provider, effort="medium"):
+    import json
+    from gsAgents import Actor
+
+    with open(actorFile, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    Actors = [
+        Actor(
+            client=client,
+            model=model,
+            provider=provider,
+            effort=effort,
+            **a
+        )
+        for a in data["actors"]
+    ]
+
+    actor_map = {a.actor_id: a for a in Actors]
+
+    print("Actors initialised:", len(Actors))
+    for actor in Actors:
+        print(actor.actor_id, ":", actor.name)
 
     return Actors, actor_map

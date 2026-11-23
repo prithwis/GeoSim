@@ -177,7 +177,7 @@ class WorldState:
 
 
 @dataclass
-class Actor:
+class zzzActor:
     actor_id: str
     name: str
     description: str
