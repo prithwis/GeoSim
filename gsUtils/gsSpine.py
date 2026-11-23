@@ -62,7 +62,7 @@ def initialiseActors(actorFile, client, model, provider, effort="medium"):
         for a in data["actors"]
     ]
 
-    actor_map = {a.actor_id: a for a in Actors]
+    actor_map = {a.actor_id: a for a in Actors}
 
     print("Actors initialised:", len(Actors))
     for actor in Actors:
