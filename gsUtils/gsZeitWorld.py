@@ -21,9 +21,30 @@ class ZeitWorld:
         1. Initialise W[0].
         2. Generate W[t+1] from W[t] and a selected event.
     """
+    class ZeitWorld:
+
     def __init__(self, client, role, model, provider, effort="medium"):
-            super().__init__(client, role, model, provider, effort)
-            self.initialised = False
+
+        self.client = client
+        self.role = role
+        self.model = model
+        self.provider = provider
+        self.effort = effort
+
+        self.initialised = False
+
+    def ask(self, query):
+        """
+        Send a query to the configured LLM.
+        """
+        return callLLM(
+            self.client,
+            self.role,
+            query,
+            model=self.model,
+            provider=self.provider,
+            effort=self.effort
+        )
 
     def initialise(self, variables, world_facts, init_prompt):
         import json
