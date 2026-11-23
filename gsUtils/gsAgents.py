@@ -220,6 +220,7 @@ class Actor(Agent):
 
     def __init__(self, client, model, provider,
                  actor_id, name, description, role,
+                 actor_type="LLM", email=None,
                  effort="medium"):
 
         super().__init__(client, role, model, provider, effort)
@@ -227,11 +228,11 @@ class Actor(Agent):
         self.actor_id = actor_id
         self.name = name
         self.description = description
+        self.actor_type = actor_type
+        self.email = email
 
     def propose(self, W, E, propose_prompt):
         raise NotImplementedError
-
-
 # ------------------------------------------------------------
 # Centaur
 # ------------------------------------------------------------
