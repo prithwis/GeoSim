@@ -21,7 +21,6 @@ class ZeitWorld:
         1. Initialise W[0].
         2. Generate W[t+1] from W[t] and a selected event.
     """
-    class ZeitWorld:
 
     def __init__(self, client, role, model, provider, effort="medium"):
 
