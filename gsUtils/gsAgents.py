@@ -228,6 +228,7 @@ class Actor(Agent):
         self.actor_id = actor_id
         self.name = name
         self.description = description
+        self.role = role
         self.actor_type = actor_type
         self.email = email
 
