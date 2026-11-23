@@ -1,5 +1,6 @@
 import json
-from gsWorld import Actor, Event, WorldVariable, WorldState
+from gsWorld import Event, WorldVariable, WorldState
+from gsAgents import Actor
 
 def getWorldFacts(MD_DIR):
     md_files = sorted(MD_DIR.glob("*.md"))
