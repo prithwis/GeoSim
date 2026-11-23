@@ -2,6 +2,8 @@ import json
 from gsWorld import Event, WorldVariable, WorldState
 from gsAgents import Actor
 
+# ====================================================================================
+
 def getWorldFacts(MD_DIR):
     md_files = sorted(MD_DIR.glob("*.md"))
 
@@ -20,6 +22,8 @@ def getWorldFacts(MD_DIR):
     print(f"Total characters: {len(world_facts):,}")
     return world_facts
     
+# ====================================================================================
+
 def getTriggerEvent(eventFile, n):
     with open(eventFile, encoding="utf-8") as f:
         data = json.load(f)
@@ -34,6 +38,7 @@ def getTriggerEvent(eventFile, n):
     #TriggerEvent.show()
     
 
+# ====================================================================================
     
 def initialiseActors(actorFile, client, model, provider, effort="medium"):
     import json
@@ -60,3 +65,4 @@ def initialiseActors(actorFile, client, model, provider, effort="medium"):
         print(actor.actor_id, ":", actor.name)
 
     return ActorsL, ActorsD
+# ====================================================================================
