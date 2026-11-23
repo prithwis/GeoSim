@@ -15,12 +15,15 @@ class Actor:
                  actor_type="LLM", email=None,
                  effort="medium"):
 
-        super().__init__(client, role, model, provider, effort)
+        self.client = client
+        self.role = role
+        self.model = model
+        self.provider = provider
+        self.effort = effort
 
         self.actor_id = actor_id
         self.name = name
         self.description = description
-        self.role = role
         self.actor_type = actor_type
         self.email = email
 
