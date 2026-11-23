@@ -55,7 +55,7 @@ def initialiseActors(actorFile, client, model, provider, effort="medium"):
 
     ActorsD  = {a.actor_id: a for a in ActorsL}
 
-    print("Actors initialised:", len(Actors))
+    print("Actors initialised:", len(ActorL))
     for actor in ActorsL:
         print(actor.actor_id, ":", actor.name)
 
