@@ -11,7 +11,7 @@ from gsLLM import callLLM
 # Base Agent
 # ------------------------------------------------------------
 
-class zAgent:
+class Agent:
     """
     Base class for all LLM-driven GeoSim agents.
 
