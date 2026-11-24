@@ -231,7 +231,19 @@ def snapShot(W, E, textVar=""):
 # Probabilities
 
 # ====================================================================================
-def setOdds(options, P, C, alpha=0.6):
+def setOdds(options, P, C, actor_id, ActorWeights, alpha=None):
+    """
+    Determine the Political/Commercial weighting.
+
+    If alpha is supplied, use it.
+    Otherwise, obtain it from ActorWeights using actor_id.
+    """
+
+    if alpha is None:
+        category = actor_id.split("_", 1)[0]
+        alpha = ActorWeights[category] / 100
+
+    # Existing validation and probability synthesis follows
     """
     Combine Political and Commercial BookMaker probabilities.
 
