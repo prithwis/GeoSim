@@ -214,4 +214,11 @@ def rollDice(options, E):
     selected.event_id = f"E{len(E)}"
 
     return selected
+    
+# ====================================================================================
+    
+def resetScenario(W, E):
+    """Reset simulation to W0 > E0 > W1."""
+    del W[2:]
+    del E[1:]
 
