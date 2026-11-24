@@ -175,9 +175,6 @@ class WorldState:
 
 # =============================================================================     
 
-
-
-
 @dataclass
 class Event:
     actor: str
@@ -185,12 +182,13 @@ class Event:
     rationale: str = ""
     event_id: str = ""
     selection_weight: float | None = None
+    actor_selection_rationale: str = ""
 
     def show(self):
-        #print(f"Event     : {self.event_id}")
         print(f"\nEvent : {self.event_id}")
         print("-" * 55)
         print(f"Actor     : {self.actor}")
+        print(f"Actor Selection Rationale : {self.actor_selection_rationale}")
         print(f"Action    : {self.action}")
         print(f"Rationale : {self.rationale}")
         print(f"selection_weight : {self.selection_weight}")

@@ -69,13 +69,156 @@ def initialiseActors(actorFile, client, model, provider, effort="medium"):
 
 # ====================================================================================
 
-def nextActor(E, ActorL, ActorD):
+def zznextActor(E, ActorL, ActorD):
 
     last_id = E[-1].actor
     last_index = ActorL.index(ActorD[last_id])
     next_index = (last_index + 1) % len(ActorL)
 
     return ActorL[next_index]
+    
+
+def nextActor(W, E, ActorL, ActorD,
+              client, model, provider, NXTA_Role,
+              effort="medium"):
+    """
+    Select the next Actor in GeoSim.
+
+    LOGIC
+    -----
+    1. Validate simulation histories and participating Actors.
+    2. Exclude the Actor responsible for the last Event.
+    3. With two Actors, select the other Actor directly.
+    4. With three or more Actors:
+       - Supply the current WorldState.
+       - Supply the latest executed Event.
+       - Supply the complete executed Event history.
+       - Supply eligible Actors and their strategic roles.
+       - Apply the external NXTA_Role prompt.
+    5. Let the LLM select the most appropriate respondent.
+       The ROLE prompt governs strategic relevance and
+       the five-epoch inactivity preference.
+    6. Validate the returned Actor ID and rationale.
+    7. Return the Actor object and selection rationale.
+
+    Does not modify W, E, or Actor objects.
+    """
+
+    import json
+    from dataclasses import asdict
+    from gsLLM import callLLM
+
+    if not E or len(W) != len(E) + 1:
+        raise ValueError("Invalid WorldState/Event history")
+
+    if len(ActorL) < 2:
+        raise ValueError("At least two Actors are required")
+
+    last_id = E[-1].actor
+
+    if last_id not in ActorD:
+        raise ValueError(f"Unknown previous Actor: {last_id}")
+
+    # Exclude the Actor responsible for the last Event
+    eligible = [
+        actor for actor in ActorL
+        if actor.actor_id != last_id
+    ]
+
+    if not eligible:
+        raise ValueError("No eligible Actors")
+
+    # Two-Actor case: deterministic selection
+    if len(ActorL) == 2:
+        actor = eligible[0]
+        reason = (
+            f"{actor.name} is the other participating Actor "
+            "and is selected to respond."
+        )
+        return actor, reason
+
+    # Three or more Actors: LLM selection
+
+    candidates = [
+        {
+            "actor_id": actor.actor_id,
+            "name": actor.name,
+            "description": actor.description,
+            "role": actor.role
+        }
+        for actor in eligible
+    ]
+
+    # Complete executed history, including E0
+    history = [
+        {
+            "event_id": event.event_id,
+            "actor": event.actor,
+            "action": event.action
+        }
+        for event in E
+    ]
+
+    system_prompt = NXTA_Role
+
+    user_prompt = f"""
+CURRENT WORLDSTATE
+==================
+{W[-1].to_json()}
+
+LATEST EXECUTED EVENT
+=====================
+{json.dumps(asdict(E[-1]), indent=2)}
+
+EXECUTED EVENT HISTORY
+======================
+{json.dumps(history, indent=2)}
+
+ELIGIBLE ACTORS
+===============
+{json.dumps(candidates, indent=2)}
+""".strip()
+
+    response = callLLM(
+        client,
+        system_prompt,
+        user_prompt,
+        model=model,
+        provider=provider,
+        effort=effort
+    )
+
+    # Parse LLM response
+    if isinstance(response, str):
+        response = response.strip()
+
+        if response.startswith("```"):
+            response = response.split("\n", 1)[1]
+            response = response.rsplit("```", 1)[0].strip()
+
+        result = json.loads(response)
+    else:
+        result = response
+
+    # Validate selection
+    if not isinstance(result, dict) or set(result) != {
+        "actor_id", "reason"
+    }:
+        raise ValueError("Invalid Actor Selector response")
+
+    actor_id = result["actor_id"]
+    reason = result["reason"]
+
+    eligible_ids = {a.actor_id for a in eligible}
+
+    if actor_id not in eligible_ids:
+        raise ValueError(f"Ineligible Actor selected: {actor_id}")
+
+    if not isinstance(reason, str) or not reason.strip():
+        raise ValueError("Missing Actor selection rationale")
+
+    return ActorD[actor_id], reason
+
 
 # ====================================================================================
 
