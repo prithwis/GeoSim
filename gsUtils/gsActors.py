@@ -242,5 +242,11 @@ class Actor:
 
         return options
 
+# ===============================================================================
+def nextActor(E, ActorL, ActorD):
 
+    last_id = E[-1].actor
+    last_index = ActorL.index(ActorD[last_id])
+    next_index = (last_index + 1) % len(ActorL)
 
+    return ActorL[next_index]

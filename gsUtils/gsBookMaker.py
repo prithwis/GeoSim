@@ -155,3 +155,24 @@ EVALUATION INSTRUCTIONS
             raise ValueError("BookMaker probabilities must sum to 1")
 
         return assessments
+
+
+# =============================================================================================
+def initialiseBookMakers(client, model, provider,
+                        BM_Generic, BM_Political_Role,
+                        BM_Commercial_Role, BM_Prompt,
+                        effort="medium"):
+
+    BM_Political = BookMaker(
+        client, model, provider,
+        BM_Generic, BM_Political_Role, BM_Prompt,
+        effort=effort
+    )
+
+    BM_Commercial = BookMaker(
+        client, model, provider,
+        BM_Generic, BM_Commercial_Role, BM_Prompt,
+        effort=effort
+    )
+
+    return BM_Political, BM_Commercial
