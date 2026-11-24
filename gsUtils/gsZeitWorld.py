@@ -86,6 +86,11 @@ class ZeitWorld:
         for original, completed in zip(variables, returned):
 
             if set(completed) != required:
+                print("Variable :", original.name)
+                print("Missing  :", required - set(completed))
+                print("Extra    :", set(completed) - required)
+                print("Returned :", json.dumps(completed, indent=2))
+
                 raise ValueError(
                     f"Incorrect fields for {original.name}"
                 )
