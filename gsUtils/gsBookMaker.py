@@ -67,8 +67,8 @@ Rationale : {event.rationale}
             raise ValueError("All proposed Events must belong to the responding Actor")
 
         # Temporary diagnostics
-        print("WorldState :", W[-1].state_id)
-        print("Last Event :", E[-1].event_id)
+        #print("WorldState :", W[-1].state_id)
+        #print("Last Event :", E[-1].event_id)
 
 
         # Generic and specific BookMaker perspectives are fixed for this run.
