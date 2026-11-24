@@ -371,7 +371,26 @@ def rollDice(options, E):
     return selected
     
 # ====================================================================================
+def generateReports(W,E, PR_Narrative, PR_Structured):
     
+    # Generate both reports
+    NarrativeReport = Reporter.generate(W, E, PR_Narrative)
+    #StructuredReport = Reporter.generate(W, E, PR_Structured)
+
+    # Unique identifier for this scenario run
+    runID = datetime.now().strftime("%y%m%d_%H%M%S")
+
+    # Save reports
+    narrativeFile = Path(f"/content/gsSiliCon_{runID}_Narrative.txt")
+    #structuredFile = Path(f"/content/gsSiliCon_{runID}_Structured.md")
+
+    narrativeFile.write_text(NarrativeReport, encoding="utf-8")
+    #structuredFile.write_text(StructuredReport, encoding="utf-8")
+
+    print("Narrative Report :", narrativeFile)
+    #print("Structured Report:", structuredFile)
+
+# ====================================================================================
 def resetScenario(W, E):
     """Reset simulation to W0 > E0 > W1."""
     del W[2:]
