@@ -65,4 +65,163 @@ def initialiseActors(actorFile, client, model, provider, effort="medium"):
         print(actor.actor_id, ":", actor.name)
     '''
     return ActorsL, ActorsD
+    
+
 # ====================================================================================
+
+def nextActor(E, ActorL, ActorD):
+
+    last_id = E[-1].actor
+    last_index = ActorL.index(ActorD[last_id])
+    next_index = (last_index + 1) % len(ActorL)
+
+    return ActorL[next_index]
+
+# ====================================================================================
+
+def snapShot(W, E, textVar=""):
+    """Print a message and the latest simulation transition."""
+    print(f"{textVar} : {W[-2].state_id} > {E[-1].event_id} > {W[-1].state_id}")
+
+# ====================================================================================
+
+# Probabilities
+
+# ====================================================================================
+def setOdds(options, P, C, alpha=0.6):
+    """
+    Combine Political and Commercial BookMaker probabilities.
+
+    LOGIC
+    -----
+    1. Receive the proposed Events and two BookMaker assessments.
+    2. Validate alpha, where:
+           alpha     = Political BookMaker weight
+           1 - alpha = Commercial BookMaker weight
+    3. Validate that both BookMakers have assessed every option.
+    4. Extract probabilities using option_index.
+    5. Verify that each probability distribution sums to 1.
+    6. Calculate the weighted probability for each option:
+
+           Final = alpha * Political + (1-alpha) * Commercial
+
+    7. Normalize the final probabilities.
+    8. Assign selection_weight to each proposed Event.
+    9. Return the updated list of options.
+
+    No Event is selected or added to Event history.
+    """
+
+    import math
+
+    if not 0 <= alpha <= 1:
+        raise ValueError("alpha must be between 0 and 1")
+
+    n = len(options)
+    if n == 0:
+        raise ValueError("No Event options supplied")
+
+    # Extract and validate BookMaker probabilities
+    def getProbabilities(results, name):
+
+        if len(results) != n:
+            raise ValueError(f"{name}: incorrect option count")
+
+        probabilities = {}
+
+        for item in results:
+            i = item["option_index"]
+            p = item["probability"]
+
+            if type(i) is not int or i not in range(n):
+                raise ValueError(f"{name}: invalid option_index")
+
+            if i in probabilities:
+                raise ValueError(f"{name}: duplicate option_index")
+
+            if not isinstance(p, (int, float)) or \
+               not math.isfinite(p) or not 0 <= p <= 1:
+                raise ValueError(f"{name}: invalid probability")
+
+            probabilities[i] = p
+
+        if not math.isclose(
+            sum(probabilities.values()), 1.0, abs_tol=1e-6
+        ):
+            raise ValueError(f"{name}: probabilities do not sum to 1")
+
+        return [probabilities[i] for i in range(n)]
+
+    political = getProbabilities(P, "Political BM")
+    commercial = getProbabilities(C, "Commercial BM")
+
+    # Weighted probability synthesis
+    weights = [
+        alpha * political[i] + (1 - alpha) * commercial[i]
+        for i in range(n)
+    ]
+
+    # Normalize and assign selection weights
+    total = sum(weights)
+
+    for option, weight in zip(options, weights):
+        option.selection_weight = weight / total
+
+    return options
+
+# ====================================================================================
+
+
+def rollDice(options):
+    """
+    Select one Event using weighted random sampling.
+
+    LOGIC
+    -----
+    1. Receive the proposed Events after setOdds() has run.
+    2. Read selection_weight from each Event.
+    3. Validate that:
+           - At least one Event exists.
+           - Every selection_weight is numeric and non-negative.
+           - The selection weights sum to 1.
+    4. Use Python's random.choices() to perform a weighted draw.
+    5. Select exactly one Event.
+    6. Return the selected Event object.
+
+    The selection is stochastic, not necessarily the Event
+    with the highest probability.
+
+    No Event ID is assigned.
+    No Event is appended to history E.
+    No WorldState is modified.
+    """
+
+    import random
+    import math
+
+    if not options:
+        raise ValueError("No Event options supplied")
+
+    # Extract selection weights
+    weights = [option.selection_weight for option in options]
+
+    # Validate weights
+    if any(
+        not isinstance(w, (int, float)) or
+        not math.isfinite(w) or w < 0
+        for w in weights
+    ):
+        raise ValueError("Invalid selection weights")
+
+    if not math.isclose(sum(weights), 1.0, abs_tol=1e-6):
+        raise ValueError("Selection weights must sum to 1")
+
+    # Stochastic Event selection
+    selected = random.choices(
+        options,
+        weights=weights,
+        k=1
+    )[0]
+
+    return selected
+
