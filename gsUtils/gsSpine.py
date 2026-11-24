@@ -172,40 +172,29 @@ def setOdds(options, P, C, alpha=0.6):
 # ====================================================================================
 
 
-def rollDice(options):
+def rollDice(options, E):
     """
     Select one Event using weighted random sampling.
 
     LOGIC
     -----
-    1. Receive the proposed Events after setOdds() has run.
-    2. Read selection_weight from each Event.
-    3. Validate that:
-           - At least one Event exists.
-           - Every selection_weight is numeric and non-negative.
-           - The selection weights sum to 1.
-    4. Use Python's random.choices() to perform a weighted draw.
-    5. Select exactly one Event.
-    6. Return the selected Event object.
+    1. Read the selection_weight of each proposed Event.
+    2. Validate that the weights are non-negative and sum to 1.
+    3. Randomly select one Event using those weights.
+    4. Assign the next Event ID using the current history length.
+       For example, if E contains E0, assign E1.
+    5. Return the selected Event.
 
-    The selection is stochastic, not necessarily the Event
-    with the highest probability.
-
-    No Event ID is assigned.
-    No Event is appended to history E.
-    No WorldState is modified.
+    Does not append the Event to E or modify WorldState.
     """
-
     import random
     import math
 
     if not options:
         raise ValueError("No Event options supplied")
 
-    # Extract selection weights
     weights = [option.selection_weight for option in options]
 
-    # Validate weights
     if any(
         not isinstance(w, (int, float)) or
         not math.isfinite(w) or w < 0
@@ -216,12 +205,13 @@ def rollDice(options):
     if not math.isclose(sum(weights), 1.0, abs_tol=1e-6):
         raise ValueError("Selection weights must sum to 1")
 
-    # Stochastic Event selection
     selected = random.choices(
         options,
         weights=weights,
         k=1
     )[0]
+
+    selected.event_id = f"E{len(E)}"
 
     return selected
 
