@@ -1,5 +1,6 @@
 from gsLLM import callLLM
-
+import json
+from dataclasses import asdict
 
 class PressReporter:
 
@@ -38,7 +39,7 @@ class PressReporter:
             history.append(state.to_json())
 
             if i < len(E):
-                history.append(E[i].to_json())
+                history.append(json.dumps(asdict(E[i]), indent=2))
 
         system_prompt = (
             f"Reporter identity: {self.agent_id}\n\n"
