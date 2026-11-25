@@ -172,13 +172,15 @@ def initialiseBookMakers(client, model, provider,
     BM_Political = BookMaker(
         client, model, provider,
         BM_Generic, BM_Political_Role, BM_Prompt,
-        effort=effort
+        effort=effort,
+        agent_id="BM_Political"
     )
 
     BM_Commercial = BookMaker(
         client, model, provider,
         BM_Generic, BM_Commercial_Role, BM_Prompt,
-        effort=effort
+        effort=effort,
+        agent_id="BM_Commercial"
     )
 
     return BM_Political, BM_Commercial
