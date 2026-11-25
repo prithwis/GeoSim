@@ -187,7 +187,7 @@ def callLLM(client, role, query, model=None,
         f"Out: {output_tokens:,} | Reasoning: {reasoning_tokens:,} | "
         f"Time: {elapsed:.1f}s"
     )
-)
+
 
     return answer
 
