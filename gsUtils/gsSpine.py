@@ -386,7 +386,7 @@ def generateReports(W, E, PR_Narrative, PR_Structured, Reporter):
     runID = datetime.now().strftime("%y%m%d_%H%M%S")
 
     # Save reports
-    narrativeFile = Path(f"/content/gsSiliCon_{runID}_Narrative.txt")
+    narrativeFile = Path(f"/content/GeoSim_{runID}_Narrative.txt")
     #structuredFile = Path(f"/content/gsSiliCon_{runID}_Structured.md")
 
     narrativeFile.write_text(NarrativeReport, encoding="utf-8")
