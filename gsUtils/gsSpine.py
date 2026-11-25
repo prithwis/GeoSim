@@ -1,3 +1,13 @@
+# ================================================================
+#  GeoSim | युगनीति · यन्त्रदर्पण
+#  Computational Exploration of Strategic Futures
+# ----------------------------------------------------------------
+#  Designed and developed by Prithwis Mukerjee, PhD
+#  Copyright © 2026 Prithwis Mukerjee
+#
+#  Exploring possible futures, not predicting a predetermined one.
+# ================================================================
+
 import json
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -190,7 +200,8 @@ ELIGIBLE ACTORS
         user_prompt,
         model=model,
         provider=provider,
-        effort=effort
+        effort=effort,
+        agent_id="ActorSelector"
     )
 
     # Parse LLM response

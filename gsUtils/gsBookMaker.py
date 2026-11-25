@@ -1,7 +1,12 @@
-# ============================================================
-# gsBookMaker.py
-# GeoSim - BookMaker probability assessments
-# ============================================================
+# ================================================================
+#  GeoSim | युगनीति · यन्त्रदर्पण
+#  Computational Exploration of Strategic Futures
+# ----------------------------------------------------------------
+#  Designed and developed by Prithwis Mukerjee, PhD
+#  Copyright © 2026 Prithwis Mukerjee
+#
+#  Exploring possible futures, not predicting a predetermined one.
+# ================================================================
 
 import json
 import math
@@ -19,13 +24,13 @@ class BookMaker:
 
     def __init__(self, client, model, provider,
                  generic_role, role, evaluate_prompt,
-                 effort="medium"):
+                 effort="medium",agent_id="BookMaker"):
 
         self.client = client
         self.model = model
         self.provider = provider
         self.effort = effort
-
+        self.agent_id = agent_id
         self.generic_role = generic_role
         self.role = role
         self.evaluate_prompt = evaluate_prompt
@@ -122,7 +127,8 @@ EVALUATION INSTRUCTIONS
             user_prompt,
             model=self.model,
             provider=self.provider,
-            effort=self.effort
+            effort=self.effort,
+            agent_id=self.agent_id
         )
 
         if isinstance(response, str):

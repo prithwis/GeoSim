@@ -1,9 +1,12 @@
-
-# ============================================================
-# gsWorld.py
-# GeoSim - World Variables and WorldState
-# ============================================================
-
+# ================================================================
+#  GeoSim | युगनीति · यन्त्रदर्पण
+#  Computational Exploration of Strategic Futures
+# ----------------------------------------------------------------
+#  Designed and developed by Prithwis Mukerjee, PhD
+#  Copyright © 2026 Prithwis Mukerjee
+#
+#  Exploring possible futures, not predicting a predetermined one.
+# ================================================================
 import json
 from pathlib import Path
 from dataclasses import dataclass, field

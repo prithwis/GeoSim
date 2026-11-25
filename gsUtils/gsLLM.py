@@ -1,7 +1,12 @@
-# Copyright (c) 2022-present Prithwis Mukerjee
-# SPDX-License-Identifier: GPL-3.0-only
-# See LICENSE in the repository root.
-# --------------------------------------------------
+# ================================================================
+#  GeoSim | युगनीति · यन्त्रदर्पण
+#  Computational Exploration of Strategic Futures
+# ----------------------------------------------------------------
+#  Designed and developed by Prithwis Mukerjee, PhD
+#  Copyright © 2026 Prithwis Mukerjee
+#
+#  Exploring possible futures, not predicting a predetermined one.
+# ================================================================
 import os
 from google.colab import userdata
 
@@ -69,7 +74,7 @@ def authenticateLLM(provider="openai"):
 import time
 
 def callLLM(client, role, query, model=None,
-            provider="openai", effort="medium"):
+            provider="openai", effort="medium",agent_id=None):
 
     provider = provider.lower()
     model = model or DEFAULT_MODELS[provider]
@@ -165,13 +170,23 @@ def callLLM(client, role, query, model=None,
         raise ValueError(f"Unsupported provider: {provider}")
 
     elapsed = time.perf_counter() - start
-
+    '''
     print(
     f"{provider.upper()} | {getattr(response, 'model', model)} | "
     f"Effort: {effort if provider == 'openai' else 'Default'} | "
     f"In: {input_tokens:,} | Cached: {cached_tokens:,} | "
     f"Out: {output_tokens:,} | Reasoning: {reasoning_tokens:,} | "
     f"Time: {elapsed:.1f}s"
+    '''
+    label = f"{agent_id} | " if agent_id else ""
+
+    print(
+        f"{label}{provider.upper()} | {getattr(response, 'model', model)} | "
+        f"Effort: {effort if provider == 'openai' else 'Default'} | "
+        f"In: {input_tokens:,} | Cached: {cached_tokens:,} | "
+        f"Out: {output_tokens:,} | Reasoning: {reasoning_tokens:,} | "
+        f"Time: {elapsed:.1f}s"
+    )
 )
 
     return answer

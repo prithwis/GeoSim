@@ -1,10 +1,12 @@
-# =============================================================================
-# MOS — Monte Carlo++ (MC++)
-# An LLM-Based Geopolitical Simulation Framework
-# Part of the Centaur Architecture
-# Action -> Consequence -> Reaction -> ...
-# Designed and Developed by Prithwis Mukerjee | 2026
-# =============================================================================
+# ================================================================
+#  GeoSim | युगनीति · यन्त्रदर्पण
+#  Computational Exploration of Strategic Futures
+# ----------------------------------------------------------------
+#  Designed and developed by Prithwis Mukerjee, PhD
+#  Copyright © 2026 Prithwis Mukerjee
+#
+#  Exploring possible futures, not predicting a predetermined one.
+# ================================================================
 
 
 from gsLLM import *

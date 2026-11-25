@@ -1,8 +1,12 @@
-
-# ============================================================
-# gsActors.py
-# GeoSim - LLM Agent Classes
-# ============================================================
+# ================================================================
+#  GeoSim | युगनीति · यन्त्रदर्पण
+#  Computational Exploration of Strategic Futures
+# ----------------------------------------------------------------
+#  Designed and developed by Prithwis Mukerjee, PhD
+#  Copyright © 2026 Prithwis Mukerjee
+#
+#  Exploring possible futures, not predicting a predetermined one.
+# ================================================================
 
 from gsLLM import callLLM
 
@@ -185,7 +189,8 @@ class Actor:
             user_prompt,
             model=self.model,
             provider=self.provider,
-            effort=self.effort
+            effort=self.effort,
+            agent_id=self.actor_id
         )
 
         # --------------------------------------------------------
