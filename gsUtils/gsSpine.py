@@ -1,6 +1,10 @@
 import json
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import pytz
 from gsWorld import Event, WorldVariable, WorldState
 from gsActors import Actor
+from gsReporter import *
 
 # ====================================================================================
 
@@ -371,7 +375,7 @@ def rollDice(options, E):
     return selected
     
 # ====================================================================================
-def generateReports(W,E, PR_Narrative, PR_Structured):
+def generateReports(W, E, PR_Narrative, PR_Structured, Reporter):
     
     # Generate both reports
     NarrativeReport = Reporter.generate(W, E, PR_Narrative)
