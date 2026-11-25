@@ -394,6 +394,8 @@ def generateReports(W, E, PR_Narrative, PR_Structured, Reporter):
 
     print("Narrative Report :", narrativeFile)
     #print("Structured Report:", structuredFile)
+    
+    return NarrativeReport
 
 # ====================================================================================
 def resetScenario(W, E):
