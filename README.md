@@ -1,4 +1,11 @@
-# GeoSim
 ![alt text](https://raw.githubusercontent.com/prithwis/GeoSim/refs/heads/main/images/gsBanner_0.png)<br>
-GeoSim  -- An Agent-Based Geopolitical Simulation Platform;  Powered by MonteCarlo++
-![alt text](https://raw.githubusercontent.com/prithwis/GeoSim/refs/heads/main/images/gsLogo_600x600.png)<br>
+
+# GeoSim
+## युगनीति · यन्त्रदर्पण
+*Computational Exploration of Strategic Futures*
+
+**GeoSim** is an LLM-driven, multi-agent geopolitical simulation framework designed to explore how strategic decisions can reshape an uncertain world. Unlike conventional scenario analysis, which typically examines a limited number of predefined possibilities, GeoSim allows alternative futures to emerge through interactions among autonomous decision-making agents representing nations, corporations and other strategic actors. Like the chessboard in its logo, the world is an arena of competing interests, but neither the sequence of moves nor the eventual fate of its powerful players is predetermined. GeoSim does not claim to predict the future; it computationally explores how different futures might unfold.
+
+**Technically, GeoSim combines agent-based modelling, LLM reasoning, discrete-event simulation and Monte Carlo experimentation.** Each scenario specifies its actors, strategic objectives, initial triggering event and a multidimensional **WorldState** comprising measurable geopolitical, technological or economic variables. At each simulation epoch, an LLM selects the next actor based on the evolving situation and event history. That actor proposes two alternative strategic actions, which are independently evaluated by Political and Commercial *BookMakers*. Their assessments are combined into action-selection probabilities, weighted by actor type, after which a stochastic *DiceRoller* selects the action actually executed. A separate *ZeitWorld* agent evaluates its consequences and generates the next WorldState, closing the feedback loop. The process repeats over successive epochs, maintaining a traceable history of decisions, rationales and consequences. Multiple independent runs create ensembles of possible strategic trajectories, revealing recurrent patterns, divergent outcomes and potentially unexpected causal pathways. A reporting agent, *Vyasa*, converts these computational histories into readable strategic narratives. The resulting distributions are exploratory model outputs, not statistically calibrated forecasts.
+
+![GeoSim](https://raw.githubusercontent.com/prithwis/GeoSim/refs/heads/main/images/gsLogo_600x600.png)<br>
