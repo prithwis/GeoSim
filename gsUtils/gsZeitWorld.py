@@ -153,7 +153,7 @@ class ZeitWorld:
             )
 
         current_state = world_list[-1]
-        print("ZeitWorld Updating WorldState ----------", current_state.state_id)
+        #print("ZeitWorld Updating WorldState ----------", current_state.state_id)
 
         current_number = int(current_state.state_id[1:])
         next_state_id = f"W{current_number + 1}"
