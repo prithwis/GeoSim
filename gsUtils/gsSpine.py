@@ -84,14 +84,7 @@ def initialiseActors(actorFile, client, model, provider, effort="medium"):
 
 # ====================================================================================
 
-def zznextActor(E, ActorL, ActorD):
 
-    last_id = E[-1].actor
-    last_index = ActorL.index(ActorD[last_id])
-    next_index = (last_index + 1) % len(ActorL)
-
-    return ActorL[next_index]
-    
 
 def nextActor(W, E, ActorL, ActorD,
               client, model, provider, NXTA_Role,
@@ -394,7 +387,8 @@ def generateReports(W, E, PR_Narrative, PR_Structured, Reporter):
     #StructuredReport = Reporter.generate(W, E, PR_Structured)
 
     # Unique identifier for this scenario run
-    runID = datetime.now().strftime("%y%m%d_%H%M%S")
+    runID = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%y%m%d_%H%M%S")
+    #runID = datetime.now().strftime("%y%m%d_%H%M%S")
 
     # Save reports
     narrativeFile = Path(f"/content/GeoSim_{runID}_Narrative.txt")
