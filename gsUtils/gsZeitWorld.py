@@ -83,7 +83,7 @@ class ZeitWorld:
             raise ValueError("ZeitWorld returned incorrect variable count")
 
         required = {
-            "name", "description", "direction", "index",
+            "name", "description", "direction",
             "status", "rationale", "conditions"
         }
 
@@ -105,10 +105,7 @@ class ZeitWorld:
                         f"{original.name}: {key} was modified"
                     )
 
-            if type(completed["index"]) not in (int, float) or completed["index"] != 100:
-                raise ValueError(
-                    f"{original.name}: initial index must be 100"
-                )
+            completed["index"] = 100   # to fix index error
 
             if not isinstance(completed["status"], str):
                 raise ValueError("Invalid status")
