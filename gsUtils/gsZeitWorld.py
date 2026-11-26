@@ -198,7 +198,7 @@ class ZeitWorld:
 
         # Successfully generated state becomes history
         #world_list.append(new_state)
-        print("Generated WorldState ----------", new_state.state_id)
+        print("Updated WorldState to : ", new_state.state_id)
 
         return new_state
 
