@@ -248,7 +248,7 @@ def _addWorldStateTable(doc, W, E, variableHeaders=None):
 # NARRATIVE DOCX CREATOR
 # ============================================================
 
-def createNarrativeDocx(
+def createDocx(
     narrativeText,
     W=None,
     E=None,
