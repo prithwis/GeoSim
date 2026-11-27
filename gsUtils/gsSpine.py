@@ -425,6 +425,95 @@ def generateReports(W, E, PR_Narrative, PR_Structured, Reporter):
     return NarrativeReport
 
 # ====================================================================================
+def auditTrail(A, filename="auditTrail.txt"):
+    """
+    Generate a complete audit trail of strategic alternatives
+    after all simulation epochs have been completed.
+    """
+
+    lines = [
+        "# GeoSim — Strategic Alternatives Audit Trail",
+        "",
+        f"Total Epochs: {len(A)}",
+        ""
+    ]
+
+    for epoch, a in enumerate(A, start=1):
+
+        selected = a.options[a.selected_index]
+
+        lines.extend([
+            "---",
+            "",
+            f"## Epoch {epoch}",
+            "",
+            f"**Actor:** {selected.actor}",
+            "",
+            f"**Actor Selection Rationale:** "
+            f"{selected.actor_selection_rationale}",
+            "",
+            f"**Political Weight (Alpha):** {a.alpha:.2f}",
+            "",
+            f"**Selected Event:** {selected.event_id}",
+            "",
+            "### Probability Summary",
+            "",
+            "| Alternative | Political | Commercial | Combined | Status |",
+            "|---|---:|---:|---:|---|"
+        ])
+
+        for i, option in enumerate(a.options):
+
+            status = (
+                "**SELECTED**" if i == a.selected_index
+                else "Not Selected"
+            )
+
+            lines.append(
+                f"| {i+1} | "
+                f"{a.P[i]['probability']:.2%} | "
+                f"{a.C[i]['probability']:.2%} | "
+                f"{option.selection_weight:.2%} | "
+                f"{status} |"
+            )
+
+        lines.append("")
+
+        for i, option in enumerate(a.options):
+
+            status = (
+                "SELECTED" if i == a.selected_index
+                else "NOT SELECTED"
+            )
+
+            lines.extend([
+                f"### Alternative {i+1} — {status}",
+                "",
+                "**Proposed Action**",
+                "",
+                option.action,
+                "",
+                "**Strategic Rationale**",
+                "",
+                option.rationale,
+                "",
+                "**Political BookMaker Rationale**",
+                "",
+                a.P[i]["rationale"],
+                "",
+                "**Commercial BookMaker Rationale**",
+                "",
+                a.C[i]["rationale"],
+                ""
+            ])
+
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+
+    print(f"Audit Trail saved to {filename}")
+
+# ====================================================================================
+
 def resetScenario(W, E):
     """Reset simulation to W0 > E0 > W1."""
     del W[2:]
