@@ -520,8 +520,9 @@ def auditTrail(A, filename="auditTrail.txt"):
 
 # ====================================================================================
 
-def resetScenario(W, E):
+def resetScenario(W, E, A):
     """Reset simulation to W0 > E0 > W1."""
     del W[2:]
     del E[1:]
+    A = []
 
