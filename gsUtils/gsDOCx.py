@@ -258,6 +258,7 @@ def createNarrativeDocx(
     outputDir="/content",
     variableHeaders=None,
     logoPath="/content/gsLogo_150x150.png",
+    reportType="Narrative",
 ):
 
     import os
@@ -282,7 +283,8 @@ def createNarrativeDocx(
 
     if suffix is None:
         suffix = now.strftime('%y%m%d_%H%M%S')
-    filename = f"GeoSim_{scenarioID}_{suffix}.docx"
+    #filename = f"GeoSim_{scenarioID}_{suffix}.docx"
+    filename = f"GeoSim_{reportType}_{scenarioID}_{suffix}.docx"
     
     os.makedirs(outputDir, exist_ok=True)
     filepath = os.path.join(outputDir, filename)
