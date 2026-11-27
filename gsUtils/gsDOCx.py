@@ -545,8 +545,11 @@ def createNarrativeDocx(
     # WorldState Evolution
     # --------------------------------------------------------
 
-    if W is not None:
-        _addWorldStateTable(doc, W, E, variableHeaders=variableHeaders)
+    #if W is not None:
+    #    _addWorldStateTable(doc, W, E, variableHeaders=variableHeaders)
+        
+    if W is not None and reportType == "Narrative":
+    _addWorldStateTable(doc, W, E, variableHeaders=variableHeaders)
 
 
     # --------------------------------------------------------
