@@ -406,29 +406,20 @@ def recAlternatives(options, P, C, selected,
 def generateReports(W, E, A, PR_Narrative, PR_Structured,
                     PR_PathNotTaken, Reporter):
 
-    # Generate Narrative and Structured Reports
+    # Generate reports
     NarrativeReport = Reporter.generate(W, E, PR_Narrative)
     #StructuredReport = Reporter.generate(W, E, PR_Structured)
-
-    # Generate Alternatives Audit Trail
-    auditTrail(A, "auditTrail.txt")
-    auditText = Path("auditTrail.txt").read_text(encoding="utf-8")
-
-    # Generate Path Not Taken Report
-    PathNotTakenReport = Reporter.generateFromText(
-        auditText, PR_PathNotTaken
-    )
+    PathNotTakenReport = Reporter.generate(W, E, PR_PathNotTaken, A=A)
 
     # Unique identifier for this scenario run
-    runID = datetime.now(
-        ZoneInfo("Asia/Kolkata")
-    ).strftime("%y%m%d_%H%M%S")
+    runID = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%y%m%d_%H%M%S")
 
-    # Save reports
+    # Define report filenames
     narrativeFile = Path(f"/content/GeoSim_{runID}_Narrative.txt")
     #structuredFile = Path(f"/content/GeoSim_{runID}_Structured.md")
     pathNotTakenFile = Path(f"/content/GeoSim_{runID}_PathNotTaken.txt")
 
+    # Save reports
     narrativeFile.write_text(NarrativeReport, encoding="utf-8")
     #structuredFile.write_text(StructuredReport, encoding="utf-8")
     pathNotTakenFile.write_text(PathNotTakenReport, encoding="utf-8")
