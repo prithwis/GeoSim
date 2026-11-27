@@ -16,7 +16,7 @@ from pathlib import Path
 from gsWorld import Event, WorldVariable, WorldState
 from gsActors import Actor
 from gsReporter import *
-from gsWorlds import *
+from gsWorld import *
 
 # ====================================================================================
 
