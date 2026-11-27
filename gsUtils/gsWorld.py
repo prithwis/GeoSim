@@ -196,11 +196,12 @@ class Event:
         print(f"Rationale : {self.rationale}")
         print(f"selection_weight : {self.selection_weight}")
         
-#      '''  
-#    def to_json(self):
-#        return json.dumps(
-#            self,
-#            default=lambda o: o.__dict__,
-#            indent=2
-#        )
-#        '''
+# =============================================================================           '''
+
+@dataclass
+class Alternatives:
+    options: list[Event]
+    P: list[dict]
+    C: list[dict]
+    alpha: float
+    selected_index: int

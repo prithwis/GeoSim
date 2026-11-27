@@ -378,7 +378,29 @@ def rollDice(options, E):
     selected.event_id = f"E{len(E)}"
 
     return selected
-    
+
+# ====================================================================================
+
+def recAlternatives(options, P, C, selected,
+                    actor_id, ActorWeights):
+
+    from copy import deepcopy
+
+    category = actor_id.split("_", 1)[0]
+    alpha = ActorWeights[category] / 100
+
+    selected_index = next(
+        i for i, option in enumerate(options)
+        if option is selected
+    )
+
+    return Alternatives(
+        options=deepcopy(options),
+        P=deepcopy(P),
+        C=deepcopy(C),
+        alpha=alpha,
+        selected_index=selected_index
+    )
 # ====================================================================================
 def generateReports(W, E, PR_Narrative, PR_Structured, Reporter):
     
