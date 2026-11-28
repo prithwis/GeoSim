@@ -404,7 +404,7 @@ def recAlternatives(options, P, C, selected,
     )
 # ====================================================================================
 def generateReports(W, E, A, PR_Narrative, PR_Structured,
-                    PR_PathNotTaken, Reporter):
+                    PR_PathNotTaken, Reporter,runID):
 
     # Generate reports
     NarrativeReport = Reporter.generate(W, E, PR_Narrative)
@@ -412,12 +412,12 @@ def generateReports(W, E, A, PR_Narrative, PR_Structured,
     PathNotTakenReport = Reporter.generate(W, E, PR_PathNotTaken, A=A)
 
     # Unique identifier for this scenario run
-    runID = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%y%m%d_%H%M%S")
+    #runID = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%y%m%d_%H%M%S")
 
     # Define report filenames
-    narrativeFile = Path(f"/content/GeoSim_{runID}_Narrative.txt")
+    narrativeFile = Path(f"/content/GeoSim_Narrative_{runID}.txt")
     #structuredFile = Path(f"/content/GeoSim_{runID}_Structured.md")
-    pathNotTakenFile = Path(f"/content/GeoSim_{runID}_PathNotTaken.txt")
+    pathNotTakenFile = Path(f"/content/GeoSim_{runID}_PathNotTaken_{runID}.txt")
 
     # Save reports
     narrativeFile.write_text(NarrativeReport, encoding="utf-8")
@@ -431,7 +431,7 @@ def generateReports(W, E, A, PR_Narrative, PR_Structured,
     return NarrativeReport, PathNotTakenReport
 
 # ====================================================================================
-def auditTrail(A, filename="auditTrail.txt"):
+def auditTrail(A, runID, filename="gsAudit.txt"):
     """
     Generate a complete audit trail of strategic alternatives
     after all simulation epochs have been completed.
@@ -513,6 +513,7 @@ def auditTrail(A, filename="auditTrail.txt"):
                 ""
             ])
 
+    filename = filename+runID
     with open(filename, "w", encoding="utf-8") as f:
         f.write("\n".join(lines))
 
